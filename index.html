@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="initial-scale=1.0">
+		<title>Tim's Neighborhood Map</title>
+		<meta name="Map App" content="Udacity FEND Project 5-20 Neighborhood Map. This is a single-page app featuring a map of my hometown.">
+		<link href="https://fonts.googleapis.com/css?family=Overpass:200,400,800" rel="stylesheet">
+		<link rel="stylesheet" type="text/css" href="styles.css">
+	</head>
+	<body>
+		<header>
+			<h1>My Neighborhood Map</h1>
+			<h2>LOS ANGELES, CA</h2>
+			<form id="searchContainer" data-bind="submit: yelpRequest">
+				<div class="toggle toggleSearch" data-bind="click: toggledRequest">
+					<h4 class="searchToggle">&#9906;</h4>
+				</div>
+				<input class="searchbar" placeholder="Search..." data-bind="value: term, valueUpdate: 'afterkeydown', event: { keyup: filterMarkers, focus: showNav}">
+				<div class="toggle toggleMenu" data-bind="click: toggleNav">
+					<h4 class="navToggle">&#9660;</h4>
+				</div>
+			</form>
+		</header>
+		<div id="navMenu">
+			<div data-bind="if: favLocations().length > 0">
+				<div class="subHead"><strong>Favorites</strong></div>
+				<div id="favContainer" data-bind="foreach: favLocations()">
+					<!-- ko if: name.toLowerCase().indexOf(term().toLowerCase()) > -1 -->
+					<div class="group favResult">
+						<input class="addFav" type="submit" value="-" data-bind="click: $parent.minusFavorite"/>
+						<div class="favItem item" data-bind="text: name, click: zoomFav"></div>
+					</div>
+					<!-- /ko -->
+				</div>
+			</div>
+			<div data-bind="if: yelpLocations().length > 0">
+				<div class="subHead"><strong>Search Results</strong></div>
+				<div  id="yelpContainer" data-bind="foreach: yelpLocations()">
+					<!-- ko if: name.toLowerCase().indexOf(term().toLowerCase()) > -1 -->
+					<div class="group">
+						<input class="addFav" type="submit" value="+" data-bind="click: $parent.addFavorite"/>
+						<div class="yelpItem item" data-bind="text: name, click: zoomYelp"></div>
+					</div>
+					<!-- /ko -->
+				</div>
+			</div>
+		</div>
+
+		<div id="mapContainer"></div>
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+		<script src='lib/knockout-3.4.2.js'></script>
+		<script src="lib/config.js"></script>
+		<script src="app.js"></script>
+		<script  async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDHYVdrCXp8Zrkxbt8RbfpQTYbju3x_B4I&callback=initMap" onerror="googleError()"></script>
+	</body>
+</html>
